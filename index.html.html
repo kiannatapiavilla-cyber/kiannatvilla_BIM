@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kianna T. Villa — BIM & Modelado Arquitectónico</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+    :root {
+      --light-purple: #dde0ff;
+      --dark-green: #053130;
+      --purple: #a1a9fe;
+      --golden: #bc9159;
+      --muted: #496362;
+      --line: rgba(5,49,48,.18);
+      --white: #ffffff;
+      --footer-bg: #032523;
+    }
+
+    /* Desplazamiento suave para los anclajes internos */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--light-purple);
+      color: var(--dark-green);
+      font-family: 'DM Sans', Arial, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA DE NAVEGACIÓN SUPERIOR INTERNA */
+    .barra-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--light-purple);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+    }
+
+    .nav-contenedor {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 28px;
+    }
+
+    .nav-contenedor a {
+      color: var(--dark-green);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+    }
+
+    .nav-contenedor a:hover {
+      color: var(--golden);
+    }
+
+    .contenedor {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* TYPOGRAPHY SHARED */
+    h1, h2 {
+      margin: 0;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 500;
+      line-height: 1.08;
+    }
+
+    .numero {
+      margin-bottom: 14px;
+      color: var(--golden);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    /* ANIMACIÓN DE TRANSICIÓN TIPO CANVA AL HACER SCROLL */
+    .revelar-seccion {
+      opacity: 0;
+      transform: translateY(45px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .revelar-seccion.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 1. SECCIÓN INICIO / HERO */
+    .inicio {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 50px 0 80px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(38px, 7vw, 80px);
+    }
+
+    .etiqueta {
+      margin: 0 0 22px;
+      color: var(--golden);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      max-width: 620px;
+      font-size: clamp(40px, 5.5vw, 76px);
+      letter-spacing: -.035em;
+    }
+
+    .italica {
+      font-style: italic;
+    }
+
+    .descripcion {
+      max-width: 520px;
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .boton {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 31px;
+      padding: 13px 22px;
+      border: 1px solid var(--dark-green);
+      background: var(--dark-green);
+      color: var(--light-purple);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .boton:hover {
+      border-color: var(--golden);
+      background: var(--golden);
+      color: var(--dark-green);
+    }
+
+    .imagen-hero {
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .imagen {
+      display: block;
+      width: 100%;
+      max-width: 440px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* 2. SECCIÓN SERVICIOS */
+    .servicios {
+      padding: 90px 0;
+    }
+
+    .encabezado-servicios {
+      max-width: 780px;
+      margin: 0 auto 55px;
+      text-align: center;
+    }
+
+    .encabezado-servicios h1 {
+      font-size: clamp(34px, 4.5vw, 56px);
+      letter-spacing: -.03em;
+    }
+
+    .intro-servicios {
+      max-width: 650px;
+      margin: 20px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .tarjetas {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .tarjeta {
+      min-height: 245px;
+      padding: 27px 24px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.48);
+      box-shadow: 0 10px 28px rgba(5,49,48,.04);
+      transition: .25s ease;
+    }
+
+    .tarjeta:hover {
+      border-color: var(--purple);
+      box-shadow: 0 14px 30px rgba(5,49,48,.08);
+    }
+
+    .tarjeta-numero {
+      display: block;
+      margin-bottom: 44px;
+      color: var(--golden);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tarjeta h2 {
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+
+    .tarjeta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* 3. SECCIÓN MUESTRAS */
+    .muestras {
+      padding: 60px 0;
+    }
+
+    .muestras-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.65fr;
+      gap: 20px;
+      align-items: flex-end;
+    }
+
+    .columna-derecha {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .encabezado-muestras {
+      margin-bottom: 24px;
+      text-align: right;
+    }
+
+    .encabezado-muestras h1 {
+      font-size: clamp(30px, 4vw, 48px);
+      letter-spacing: -.03em;
+      text-align: right;
+    }
+
+    .intro-muestras {
+      max-width: 540px;
+      margin: 12px 0 0 auto;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    .secundarias {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .card-frame {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--dark-green);
+    }
+
+    .card-frame-principal {
+      aspect-ratio: 10 / 13;
+    }
+
+    .card-frame-secundaria {
+      aspect-ratio: 9 / 16;
+    }
+
+    .card-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .card-frame:hover img {
+      transform: scale(1.03);
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px 12px;
+      background: linear-gradient(to top, rgba(5,49,48,0.88) 0%, rgba(5,49,48,0.35) 45%, transparent 100%);
+      color: var(--white);
+    }
+
+    .card-overlay h2 {
+      font-size: 16px;
+      color: var(--white);
+      text-align: left;
+    }
+
+    .card-frame-principal .card-overlay h2 {
+      font-size: 20px;
+    }
+
+    .card-overlay p {
+      margin: 6px 0 0;
+      font-size: 12px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.9);
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      text-align: left;
+      transition: max-height 0.35s ease, opacity 0.35s ease;
+    }
+
+    .card-frame:hover .card-overlay p {
+      max-height: 100px;
+      opacity: 1;
+    }
+
+    /* 4. SECCIÓN SOBRE MÍ */
+    .sobre {
+      padding: 80px 0;
+    }
+
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr;
+      align-items: center;
+      gap: clamp(40px, 6vw, 80px);
+    }
+
+    .imagen-sobre {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 10 / 13;
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--dark-green);
+    }
+
+    .imagen-sobre img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .imagen-sobre:hover img {
+      transform: scale(1.03);
+    }
+
+    .contenido-sobre {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .contenido-sobre h1 {
+      font-size: clamp(32px, 4.2vw, 48px);
+      letter-spacing: -.03em;
+    }
+
+    .descripcion-sobre {
+      max-width: 620px;
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .herramientas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 26px;
+    }
+
+    .herramienta {
+      padding: 8px 12px;
+      border: 1px solid rgba(5,49,48,.2);
+      background: rgba(255,255,255,.45);
+      color: var(--dark-green);
+      font-size: 12px;
+      border-radius: 2px;
+    }
+
+    /* 5. SECCIÓN CONTACTO / HABLEMOS (PANTALLA COMPLETA INDEPENDIENTE) */
+    .contacto {
+      min-height: 100vh;
+      background: var(--dark-green);
+      color: var(--light-purple);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 0;
+      text-align: center;
+    }
+
+    .contacto h1 {
+      max-width: 850px;
+      margin: 0 auto;
+      color: var(--light-purple);
+      font-size: clamp(40px, 6vw, 68px);
+      letter-spacing: -.02em;
+    }
+
+    .contacto .subtitulo-contacto {
+      margin: 12px auto 0;
+      color: var(--golden);
+      font-size: 16px; /* Mismo tamaño de fuente del texto */
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .contacto p {
+      max-width: 590px;
+      margin: 16px auto 0;
+      color: rgba(221,224,255,.85);
+      font-size: 16px;
+    }
+
+    .contacto-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 36px;
+    }
+
+    .contacto-links a {
+      display: inline-flex;
+      width: 52px;
+      height: 52px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(221,224,255,.5);
+      border-radius: 50%;
+      color: var(--light-purple);
+      background: transparent;
+      text-decoration: none;
+      transition: all .25s ease;
+    }
+
+    .contacto-links a:hover {
+      border-color: var(--golden);
+      background: var(--golden);
+      color: var(--dark-green);
+      transform: translateY(-3px);
+    }
+
+    .contacto-links svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* 6. PIE DE PÁGINA FINAL */
+    .pie-pagina {
+      padding: 22px 0;
+      background: var(--footer-bg);
+      color: rgba(221, 224, 255, 0.75);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(221, 224, 255, 0.1);
+    }
+
+    /* ADAPTACIÓN MÓVIL */
+    @media (max-width: 900px) {
+      .contacto {
+        min-height: auto;
+        padding: 80px 0;
+      }
+
+      .tarjetas {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .muestras-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .encabezado-muestras, .encabezado-muestras h1, .intro-muestras {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .card-frame-principal {
+        aspect-ratio: 4 / 5;
+      }
+
+      .sobre-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contenido-sobre {
+        align-items: center;
+        text-align: center;
+      }
+
+      .contenido-sobre h1, .descripcion-sobre {
+        text-align: center;
+      }
+
+      .herramientas {
+        justify-content: center;
+      }
+
+      .imagen-sobre {
+        max-width: 420px;
+        margin: 0 auto;
+        aspect-ratio: 4 / 5;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-contenedor {
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .contenedor {
+        width: min(100% - 28px, 560px);
+      }
+
+      .hero {
+        padding: 30px 0;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: clamp(34px, 10vw, 48px);
+      }
+
+      .descripcion {
+        font-size: 16px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .boton {
+        width: 100%;
+      }
+
+      .imagen {
+        max-width: 280px;
+      }
+
+      .servicios {
+        padding: 60px 0;
+      }
+
+      .encabezado-servicios {
+        margin-bottom: 32px;
+        text-align: center;
+      }
+
+      .tarjetas {
+        grid-template-columns: 1fr;
+      }
+
+      .tarjeta {
+        min-height: auto;
+      }
+
+      .tarjeta-numero {
+        margin-bottom: 20px;
+      }
+
+      .secundarias {
+        grid-template-columns: 1fr;
+      }
+
+      .card-frame-secundaria {
+        aspect-ratio: 4 / 3;
+      }
+
+      .card-overlay p {
+        max-height: 120px;
+        opacity: 1;
+      }
+
+      .sobre {
+        padding: 50px 0;
+      }
+
+      .contacto {
+        padding: 60px 0;
+      }
+
+      .contacto-links {
+        gap: 14px;
+      }
+
+      .contacto-links a {
+        width: 44px;
+        height: 44px;
+      }
+
+      .contacto-links svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .pie-pagina {
+        padding: 18px 14px;
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN INTERNA (FLUÍDA) -->
+  <nav class="barra-nav">
+    <div class="nav-contenedor">
+      <a href="#inicio">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#muestras">Muestras</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#hablemos">Hablemos</a>
+    </div>
+  </nav>
+
+  <!-- 1. HERO / INICIO -->
+  <div class="inicio revelar-seccion" id="inicio">
+    <main class="hero">
+      <div class="contenedor hero-grid">
+        <div>
+          <p class="etiqueta">BIM · Renders · Documentación Técnica</p>
+          <h1>
+            Modelado claro,
+            <span class="italica">espacios funcionales.</span>
+          </h1>
+          <p class="descripcion">
+            Apoyo a estudios de arquitectura e ingenieros con modelado en Revit, documentación constructiva y renders en Twinmotion.
+          </p>
+          <a class="boton" href="#hablemos">Hablemos</a>
+        </div>
+        <div class="imagen-hero">
+          <img class="imagen" src="https://i.ibb.co/RpLgbMqC/PW-1000px.png" alt="Foto de perfil de Kianna T. Villa">
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 2. SERVICIOS -->
+  <section class="servicios revelar-seccion" id="servicios">
+    <main class="contenedor">
+      <div class="encabezado-servicios">
+        <p class="numero">01 / Servicios</p>
+        <h1>Apoyo técnico para proyectos bien definidos.</h1>
+        <p class="intro-servicios">
+          Transformo bocetos, planos 2D, dimensiones y requerimientos de diseño en modelos organizados, planos técnicos y materiales visuales.
+        </p>
+      </div>
+
+      <div class="tarjetas">
+        <article class="tarjeta">
+          <span class="tarjeta-numero">01</span>
+          <h2>Modelado arquitectónico en Revit</h2>
+          <p>Desarrollo modelos arquitectónicos organizados a partir de la información disponible del proyecto.</p>
+        </article>
+
+        <article class="tarjeta">
+          <span class="tarjeta-numero">02</span>
+          <h2>Documentación arquitectónica</h2>
+          <p>Apoyo en planos técnicos, documentación constructiva y materiales complementarios para construcción.</p>
+        </article>
+
+        <article class="tarjeta">
+          <span class="tarjeta-numero">03</span>
+          <h2>Distribución interior residencial</h2>
+          <p>Organizo espacios interiores considerando funcionalidad, requerimientos de diseño y condiciones existentes.</p>
+        </article>
+
+        <article class="tarjeta">
+          <span class="tarjeta-numero">04</span>
+          <h2>Diseño de mobiliario</h2>
+          <p>Desarrollo propuestas y modelos de mobiliario integrados a las necesidades del espacio.</p>
+        </article>
+      </div>
+    </main>
+  </section>
+
+<!-- 3. MUESTRAS -->
+<section class="muestras revelar-seccion" id="muestras">
+  <main class="contenedor">
+    <div class="muestras-grid">
+      <!-- Tarjeta Principal (Modelado Arquitectónico -> modelado.html) -->
+      <a href="muestras/modelado.html" style="text-decoration: none; color: inherit;">
+        <article class="card-frame card-frame-principal">
+          <img src="https://i.ibb.co/fzbYMnV8/E-3.png" alt="Muestra de modelado arquitectónico en Revit">
+          <div class="card-overlay">
+            <h2>Modelado arquitectónico</h2>
+            <p>Modelado BIM preciso en Revit para visualización integral y coordinación de proyectos.</p>
+          </div>
+        </article>
+      </a>
+
+      <!-- Columna Derecha -->
+      <div class="columna-derecha">
+        <div class="encabezado-muestras">
+          <p class="numero">02 / Muestras</p>
+          <h1>Trabajo técnico, funcional y visual.</h1>
+          <p class="intro-muestras">
+            Una selección de proyectos y áreas de trabajo relacionadas con modelado, documentación, interiores y mobiliario.
+          </p>
+        </div>
+
+        <div class="secundarias">
+          <!-- Documentación -> documentacion.html -->
+          <a href="muestras/documentacion.html" style="text-decoration: none; color: inherit;">
+            <article class="card-frame card-frame-secundaria">
+              <img src="https://i.ibb.co/qLBtQMMq/2.jpg" alt="Muestra de documentación arquitectónica">
+              <div class="card-overlay">
+                <h2>Documentación</h2>
+                <p>Planos técnicos y documentación arquitectónica.</p>
+              </div>
+            </article>
+          </a>
+
+          <!-- Diseño de interiores -> interiores.html -->
+          <a href="muestras/interiores.html" style="text-decoration: none; color: inherit;">
+            <article class="card-frame card-frame-secundaria">
+              <img src="https://i.ibb.co/gF95kmPN/3.jpg" alt="Muestra de diseño de interiores">
+              <div class="card-overlay">
+                <h2>Diseño de interiores</h2>
+                <p>Distribución funcional de espacios residenciales.</p>
+              </div>
+            </article>
+          </a>
+
+          <!-- Modelado de mobiliario -> mobiliario.html -->
+          <a href="muestras/mobiliario.html" style="text-decoration: none; color: inherit;">
+            <article class="card-frame card-frame-secundaria">
+              <img src="https://i.ibb.co/F45YGRWM/2.jpg" alt="Muestra de modelado de mobiliario">
+              <div class="card-overlay">
+                <h2>Modelado de mobiliario</h2>
+                <p>Diseño y modelado de mobiliario integrado.</p>
+              </div>
+            </article>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</section> 
+
+  <!-- 4. SOBRE MÍ -->
+  <section class="sobre revelar-seccion" id="sobre-mi">
+    <main class="contenedor sobre-grid">
+      <div class="imagen-sobre">
+        <img src="https://i.ibb.co/GQfbdFHx/PW-1000-X800.jpg" alt="Foto de perfil de Kianna T. Villa">
+      </div>
+
+      <div class="contenido-sobre">
+        <p class="numero">03 / Sobre mí</p>
+        <h1>Arquitectura organizada para avanzar con claridad.</h1>
+
+        <p class="descripcion-sobre">
+          Soy Arquitecta con experiencia práctica en delineación arquitectónica, modelado con Revit, documentación técnica, renovaciones residenciales, distribución de interiores, modelado de mobiliario y visualización arquitectónica.
+        </p>
+
+        <p class="descripcion-sobre">
+          Transformo bocetos, planos 2D, dimensiones y requerimientos de diseño en modelos arquitectónicos organizados, planos técnicos y materiales visuales. Actualmente continúo fortaleciendo mis conocimientos en BIM.
+        </p>
+
+        <p class="descripcion-sobre">
+          Busco oportunidades remotas como Junior Revit Architectural Modeler, BIM Modeler o Architectural Drafter.
+        </p>
+
+        <div class="herramientas">
+          <span class="herramienta">Revit</span>
+          <span class="herramienta">Modelado BIM</span>
+          <span class="herramienta">Documentación técnica</span>
+          <span class="herramienta">Interiores residenciales</span>
+          <span class="herramienta">Mobiliario</span>
+          <span class="herramienta">Twinmotion</span>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- 5. CONTACTO / HABLEMOS -->
+  <section class="contacto revelar-seccion" id="hablemos">
+    <main class="contenedor">
+      <h1>¡Hablemos!</h1>
+      <p class="subtitulo-contacto">PARA DESARROLLAR TU PRÓXIMO PROYECTO</p>
+
+      <p>
+        Puedes conocer más sobre mi trabajo o contactarme a través de cualquiera de estas plataformas.
+      </p>
+
+      <div class="contacto-links">
+        <a href="mailto:kiannatapiavilla@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Enviar correo" title="Correo">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 4H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V6c0-1.1-.9-2-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/>
+          </svg>
+        </a>
+
+        <a href="https://www.linkedin.com/in/kiannatvilla" target="_blank" rel="noopener noreferrer" aria-label="Abrir LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24">
+            <path d="M6.5 8.5A1.5 1.5 0 1 0 6.5 5a1.5 1.5 0 0 0 0 3.5ZM5 10h3v9H5v-9Zm5 0h2.9v1.23h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6V19h-3v-4.2c0-1-.02-2.3-1.4-2.3-1.4 0-1.62 1.1-1.62 2.23V19h-3v-9Z"/>
+          </svg>
+        </a>
+
+        <a href="https://www.upwork.com/freelancers/~01ad400dcef444895c?mp_source=share" target="_blank" rel="noopener noreferrer" aria-label="Abrir Upwork" title="Upwork">
+          <svg viewBox="0 0 24 24">
+            <path d="M17.8 7.2c-1.7 0-3.1 1.1-4.1 2.8-.7-1.1-1.2-2.4-1.6-3.8H9.3v5.1c0 1.1-.6 1.8-1.6 1.8s-1.6-.7-1.6-1.8V6.2H3v5.1c0 2.8 1.9 4.7 4.7 4.7 1.9 0 3.3-1 4-2.4.2.3.4.6.6.9v3.3h3v-4.6c.8.5 1.6.7 2.5.7 2.8 0 4.8-2.1 4.8-4.8 0-1.1-.4-2-1.1-2.7-.9-.8-2.1-1.2-3.7-1.2Zm0 5.5c-.8 0-1.5-.3-2.2-.8-2.2 1.3-2.2 2-2.2 2.9 0 1.5-.6 1.5-1.5 1.5Z"/>
+          </svg>
+        </a>
+
+        <a href="https://www.behance.net/kiannatvilla" target="_blank" rel="noopener noreferrer" aria-label="Abrir Behance" title="Behance">
+          <svg viewBox="0 0 24 24">
+            <path d="M9.3 11.3c1.2-.6 1.9-1.6 1.9-2.8 0-2.1-1.7-3.5-4.4-3.5H2v14h5.2c3 0 4.8-1.5 4.8-3.9 0-1.8-1-3.1-2.7-3.8ZM5 7.6h1.7c1.1 0 1.7.4 1.7 1.2S7.8 10 6.7 10H5V7.6Zm2 8.1H5v-3h2c1.3 0 2 .5 2 1.5s-.7 1.5-2 1.5Zm9.9-7.1c-3.1 0-5.1 2-5.1 5.2s2.1 5.1 5.3 5.1c2.2 0 3.8-.8 4.8-2.3l-2.1-1.2c-.6.8-1.4 1.2-2.5 1.2-1.3 0-2.2-.7-2.4-2h7.4v-.8c0-3.2-2.1-5.2-5.4-5.2Zm-2 4c.2-1.1.9-1.7 2-1.7s1.9.6 2.1 1.7h-4.1ZM15 6h4v1.4h-4V6Z"/>
+          </svg>
+        </a>
+      </div>
+    </main>
+  </section>
+
+  <!-- 6. PIE DE PÁGINA FINAL -->
+  <footer class="pie-pagina">
+    KIANNA T. VILLA • ARQUITECTA SOSTENIBLE
+  </footer>
+
+  <!-- SCRIPT PARA LAS ANIMACIONES DE ENTRADA AL HACER SCROLL (ESTILO CANVA) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const secciones = document.querySelectorAll('.revelar-seccion');
+
+      const observerOptions = {
+        root: null,
+        threshold: 0.12
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      secciones.forEach(seccion => observer.observe(seccion));
+    });
+  </script>
+
+</body>
+</html>
