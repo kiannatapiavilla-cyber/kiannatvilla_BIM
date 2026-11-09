@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diseño de Interiores — Kianna T. Villa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+    :root {
+      --light-purple: #dde0ff;
+      --dark-green: #053130;
+      --purple: #a1a9fe;
+      --golden: #bc9159;
+      --muted: #496362;
+      --line: rgba(5,49,48,.18);
+      --white: #ffffff;
+      --footer-bg: #032523;
+    }
+
+    /* Desplazamiento suave para los anclajes internos */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--light-purple);
+      color: var(--dark-green);
+      font-family: 'DM Sans', Arial, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA DE NAVEGACIÓN SUPERIOR INTERNA */
+    .barra-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--light-purple);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+    }
+
+    .nav-contenedor {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 28px;
+    }
+
+    .nav-contenedor a {
+      color: var(--dark-green);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+    }
+
+    .nav-contenedor a:hover {
+      color: var(--golden);
+    }
+
+    .contenedor {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* TYPOGRAPHY SHARED (EXACTA A BASE) */
+    h1, h2 {
+      margin: 0;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 500;
+      line-height: 1.08;
+    }
+
+    .numero {
+      margin-bottom: 14px;
+      color: var(--golden);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    /* ANIMACIÓN DE TRANSICIÓN TIPO CANVA AL HACER SCROLL */
+    .revelar-seccion {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .revelar-seccion.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 1. SECCIÓN INTRODUCCIÓN Y PROCESO */
+    .proceso-section {
+      min-height: calc(100vh - 65px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 0 60px;
+    }
+
+    .proceso-header {
+      max-width: 780px;
+      margin-bottom: 45px;
+      text-align: left;
+    }
+
+    .proceso-header h1 {
+      font-size: clamp(34px, 4.5vw, 56px);
+      letter-spacing: -.03em;
+    }
+
+    .intro-proceso {
+      max-width: 650px;
+      margin: 20px 0 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* CONTENEDOR CÍRCULOS: 5 EN LÍNEA HORIZONTAL EN DESKTOP */
+    .circulos-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .circulo-item {
+      position: relative;
+      width: 18.5%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.48);
+      box-shadow: 0 10px 28px rgba(5,49,48,.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 16px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .circulo-numero {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--golden);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: opacity 0.3s ease;
+    }
+
+    .circulo-titulo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(16px, 1.6vw, 24px);
+      font-weight: 500;
+      color: var(--dark-green);
+      line-height: 1.15;
+      text-align: center;
+      transition: opacity 0.3s ease;
+    }
+
+    .circulo-desc {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      padding: 20px;
+      background: var(--dark-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: clamp(11px, 0.9vw, 13px);
+      line-height: 1.4;
+      color: var(--light-purple);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .circulo-item:hover {
+      border-color: var(--golden);
+      box-shadow: 0 14px 30px rgba(5,49,48,.12);
+      transform: translateY(-4px);
+    }
+
+    .circulo-item:hover .circulo-numero,
+    .circulo-item:hover .circulo-titulo {
+      opacity: 0;
+    }
+
+    .circulo-item:hover .circulo-desc {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* 2. SECCIÓN PROYECTOS ESPECÍFICOS */
+    .proyectos-wrapper {
+      padding: 60px 0 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 120px;
+    }
+
+    .proyecto-bloque {
+      width: 100%;
+      min-height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .proyecto-titulares {
+      margin-bottom: 24px;
+    }
+
+    .proyecto-titulares a {
+      text-decoration: none;
+      color: inherit;
+      display: inline-block;
+    }
+
+    .proyecto-titulares h2 {
+      font-size: clamp(30px, 4vw, 48px);
+      letter-spacing: -.03em;
+      margin: 0 0 8px 0;
+      transition: color 0.25s ease;
+    }
+
+    .proyecto-titulares a:hover h2 {
+      color: var(--golden);
+    }
+
+    .proyecto-titulares span {
+      color: var(--muted);
+      font-size: 14px;
+      display: block;
+      line-height: 1.5;
+    }
+
+    /* GRID ANTES Y DESPUÉS (RECIBIDO / ENTREGADO) */
+    .comparativa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .panel-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .panel-comparativo {
+      position: relative;
+      background: var(--dark-green);
+      border-radius: 2px;
+      overflow: hidden;
+      aspect-ratio: 16 / 11;
+    }
+
+    .panel-comparativo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .panel-link:hover .panel-comparativo img {
+      transform: scale(1.03);
+    }
+
+    .panel-etiqueta {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      color: var(--golden);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* SECCIÓN CONTÁCTAME FINAL */
+    .seccion-contacto {
+      min-height: 100vh;
+      background: var(--dark-green);
+      color: var(--light-purple);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 0;
+      text-align: center;
+    }
+
+    .seccion-contacto h2 {
+      font-size: clamp(40px, 6vw, 68px);
+      color: var(--light-purple);
+      margin-bottom: 40px;
+      letter-spacing: -.02em;
+    }
+
+    .redes-contacto {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .boton-red {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(221, 224, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light-purple);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .boton-red svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .boton-red:hover {
+      border-color: var(--golden);
+      color: var(--golden);
+      transform: translateY(-3px);
+    }
+
+    /* PIE DE PÁGINA FINAL */
+    .pie-pagina {
+      padding: 22px 0;
+      background: var(--footer-bg);
+      color: rgba(221, 224, 255, 0.75);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(221, 224, 255, 0.1);
+    }
+
+    /* ADAPTACIÓN TABLETS Y MÓVIL */
+    @media (max-width: 900px) {
+      .proceso-section { min-height: auto; padding: 50px 0; }
+      .proyecto-bloque { min-height: auto; }
+      .seccion-contacto { min-height: auto; padding: 80px 0; }
+      .circulos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; justify-items: center; }
+      .circulo-item { width: 100%; max-width: 240px; }
+      .comparativa-grid { grid-template-columns: 1fr; gap: 14px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-contenedor { justify-content: center; gap: 16px; flex-wrap: wrap; }
+      .contenedor { width: min(100% - 28px, 560px); }
+      .proceso-section { padding: 30px 0 50px; }
+      .proceso-header { margin-bottom: 32px; text-align: left; }
+      .proceso-header h1 { font-size: clamp(34px, 10vw, 48px); }
+      .intro-proceso { font-size: 16px; }
+      .circulos-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .circulo-item { max-width: 200px; padding: 12px; }
+      .circulo-titulo { font-size: 16px; }
+      .circulo-desc { padding: 14px; font-size: 11px; }
+      .proyectos-wrapper { padding: 10px 0 60px; gap: 60px; }
+      .seccion-contacto { padding: 60px 0; }
+      .redes-contacto { gap: 14px; }
+      .boton-red { width: 44px; height: 44px; }
+      .pie-pagina { padding: 18px 14px; font-size: 10px; }
+    }
+
+    @media (max-width: 440px) {
+      .circulos-grid { grid-template-columns: 1fr; }
+      .circulo-item { max-width: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN SUPERIOR INTERNA -->
+  <nav class="barra-nav">
+    <div class="nav-contenedor">
+      <a href="../index.html#inicio">Inicio</a>
+      <a href="../index.html#servicios">Servicios</a>
+      <a href="../index.html#muestras">Muestras</a>
+      <a href="../index.html#sobre-mi">Sobre mí</a>
+      <a href="../index.html#hablemos">Hablemos</a>
+    </div>
+  </nav>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN Y PROCESO -->
+  <main class="contenedor">
+    <section class="proceso-section revelar-seccion">
+      <div class="proceso-header">
+        <p class="numero">01 / Muestra</p>
+        <h1>Diseño de Interiores</h1>
+        <p class="intro-proceso">Distribución funcional de espacios residenciales.</p>
+      </div>
+
+      <!-- Círculos de proceso -->
+      <div class="circulos-grid">
+        <div class="circulo-item">
+          <span class="circulo-numero">01</span>
+          <h2 class="circulo-titulo">Conocer</h2>
+          <div class="circulo-desc">Revisión de necesidades, estilo y distribución deseada para los espacios interiores.</div>
+        </div>
+
+        <div class="circulo-item">
+          <span class="circulo-numero">02</span>
+          <h2 class="circulo-titulo">Preparar</h2>
+          <div class="circulo-desc">Análisis de plantas arquitectónicas, mobiliario existente y paleta de referencias.</div>
+        </div>
+
+        <div class="circulo-item">
+          <span class="circulo-numero">03</span>
+          <h2 class="circulo-titulo">Contratar</h2>
+          <div class="circulo-desc">Definición de alcances de diseño interior, plazos y entregables.</div>
+        </div>
+
+        <div class="circulo-item">
+          <span class="circulo-numero">04</span>
+          <h2 class="circulo-titulo">Modelar y revisar</h2>
+          <div class="circulo-desc">Distribución espacial en 3D, ajustes de diseño y revisiones de propuesta.</div>
+        </div>
+
+        <div class="circulo-item">
+          <span class="circulo-numero">05</span>
+          <h2 class="circulo-titulo">Entregar</h2>
+          <div class="circulo-desc">Entrega de planos de distribución interior, vistas y detalles finales.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: PROYECTOS ESPECÍFICOS -->
+    <div class="proyectos-wrapper">
+
+      <!-- PROYECTO 1 -->
+      <article class="proyecto-bloque revelar-seccion">
+        <div class="proyecto-titulares">
+          <p class="numero">02 / Proyecto</p>
+          <a href="disenointeriores-proyecto1.html">
+            <h2>Proyecto 1</h2>
+          </a>
+          <span>Ubicación</span>
+        </div>
+        <div class="comparativa-grid">
+          <a href="disenointeriores-proyecto1.html" class="panel-link">
+            <div class="panel-comparativo">
+              <img src="https://i.ibb.co/qLBtQMMq/2.jpg" alt="Proyecto 1 - Recibido">
+              <span class="panel-etiqueta">Recibido</span>
+            </div>
+          </a>
+          <a href="disenointeriores-proyecto1.html" class="panel-link">
+            <div class="panel-comparativo">
+              <img src="https://i.ibb.co/fzbYMnV8/E-3.png" alt="Proyecto 1 - Entregado">
+              <span class="panel-etiqueta">Entregado</span>
+            </div>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROYECTO 2 -->
+      <article class="proyecto-bloque revelar-seccion">
+        <div class="proyecto-titulares">
+          <p class="numero">03 / Proyecto</p>
+          <a href="disenointeriores-proyecto2.html">
+            <h2>Proyecto 2</h2>
+          </a>
+          <span>Ubicación</span>
+        </div>
+        <div class="comparativa-grid">
+          <a href="disenointeriores-proyecto2.html" class="panel-link">
+            <div class="panel-comparativo">
+              <img src="https://i.ibb.co/gF95kmPN/3.jpg" alt="Proyecto 2 - Recibido">
+              <span class="panel-etiqueta">Recibido</span>
+            </div>
+          </a>
+          <a href="disenointeriores-proyecto2.html" class="panel-link">
+            <div class="panel-comparativo">
+              <img src="https://i.ibb.co/F45YGRWM/2.jpg" alt="Proyecto 2 - Entregado">
+              <span class="panel-etiqueta">Entregado</span>
+            </div>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROYECTO 3 -->
+      <article class="proyecto-bloque revelar-seccion">
+        <div class="proyecto-titulares">
+          <p class="numero">04 / Proyecto</p>
+          <a href="disenointeriores-proyecto3.html">
+            <h2>Proyecto 3</h2>
+          </a>
+          <span>Ubicación</span>
+        </div>
+        <div class="comparativa-grid">
+          <a href="disenointeriores-proyecto3.html" class="panel-link">
+            <div class="panel-comparativo">
+              <img src="https://i.ibb.co/qLBtQMMq/2.jpg" alt="Proyecto 3 - Recibido">
+              <span class="panel-etiqueta">Recibido</span>
+            </div>
+          </a>
+          <a href="disenointeriores-proyecto3.html" class="panel-link">
+            <div class="panel-comparativo">
+              <img src="https://i.ibb.co/fzbYMnV8/E-3.png" alt="Proyecto 3 - Entregado">
+              <span class="panel-etiqueta">Entregado</span>
+            </div>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- SECCIÓN CONTÁCTAME FINAL -->
+  <section class="seccion-contacto revelar-seccion">
+    <div class="contenedor">
+      <h2>Contáctame</h2>
+      <div class="redes-contacto">
+        <!-- Correo Electrónico -->
+        <a href="mailto:kiannatapiavilla@gmail.com" class="boton-red" title="Correo Electrónico">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+        </a>
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/in/kiannatvilla" target="_blank" class="boton-red" title="LinkedIn">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.7a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z"/>
+          </svg>
+        </a>
+        <!-- Upwork -->
+        <a href="https://www.upwork.com/freelancers/~01ad400dcef444895c?mp_source=share" target="_blank" class="boton-red" title="Upwork">
+          <svg viewBox="0 0 24 24">
+            <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-4.14 0-5.403 3.197-5.897 5.163-1.066-1.637-1.854-3.799-2.316-5.163H7.072v5.776c0 1.583-.872 2.748-2.327 2.748-1.454 0-2.327-1.165-2.327-2.748V5.021H0v5.776c0 3.109 2.115 5.568 5.031 5.568 2.917 0 5.032-2.459 5.032-5.568v-.764c.484 1.233 1.246 2.827 2.227 4.195l-1.39 6.262h3.288l.896-4.041c1.074.685 2.235 1.054 3.477 1.054 3.328 0 6.032-2.705 6.032-6.033 0-3.327-2.704-6.032-6.032-6.032z"/>
+          </svg>
+        </a>
+        <!-- Behance -->
+        <a href="https://behance.net" target="_blank" class="boton-red" title="Behance">
+          <svg viewBox="0 0 24 24">
+            <path d="M22 7h-7V5h7v2zm-1.8 4c-1.8 0-3.2 1.4-3.2 3.2s1.4 3.2 3.2 3.2c1.2 0 2.2-.6 2.7-1.6h-1.6c-.3.4-.7.6-1.1.6-.7 0-1.2-.4-1.4-1h4.3c0-.2.1-.5.1-.7 0-2.1-1.3-3.7-3-3.7zm-1.3 1.8c.2-.5.7-.8 1.3-.8.5 0 .9.3 1.1.8h-2.4zM7.5 17H2V5h5.8c2.2 0 3.7 1.2 3.7 3 0 1.2-.6 2.1-1.6 2.6 1.3.4 2.1 1.5 2.1 2.9 0 2-1.7 3.5-4.5 3.5zm-2.8-9.7v2.4h2.7c1 0 1.6-.5 1.6-1.2s-.6-1.2-1.6-1.2H4.7zm0 4.7v2.8h3c1.1 0 1.8-.6 1.8-1.4 0-.8-.7-1.4-1.8-1.4h-3z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA FINAL -->
+  <footer class="pie-pagina">
+    KIANNA T. VILLA • ARQUITECTA SOSTENIBLE
+  </footer>
+
+  <!-- SCRIPT PARA ANIMACIONES DE ENTRADA -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const secciones = document.querySelectorAll('.revelar-seccion');
+
+      const observerOptions = {
+        root: null,
+        threshold: 0.15
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      secciones.forEach(seccion => observer.observe(seccion));
+    });
+  </script>
+
+</body>
+</html>
